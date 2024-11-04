@@ -1,16 +1,12 @@
-import os, glob, json, pandas as pd
+import glob, pandas as pd
 
 def main():
-    DATA = []
     jfiles = glob.glob("data/**/*.json", recursive=True)
-    for jd in jfiles:
-        with open(jd, "r") as d:
-            DATA.append(json.load(d))
-        # if i == 0: df = pd.read_json(jf)
-        # else: df = pd.concat([df, pd.read_json(jf)])
-    # df = df.explode(['type', 'Point'])
-    # df.to_csv("data.csv", index=False)
-    print(DATA)
+    for i, jf in enumerate(jfiles):
+        if i == 0: df = pd.read_json(jf)
+        else: df = pd.concat([df, pd.read_json(jf)])
+    df = df.explode("geolocation")
+    df.to_csv("data.csv", index=False)
 
 if __name__ == "__main__":
     main()
